@@ -55,15 +55,14 @@ class SearchQuery(Resource):
         itm_not_incl(itm_id)
         my_query = MusicModel.query.filter_by(id=itm_id).first()
         return my_query 
-        # return my_music[itm_id]
+
     @marshal_with(resource_fields)
     def post(self, itm_id):
         args = search_put.parse_args()
         music = MusicModel(id=itm_id, artist=args['artist'],song=args['song'], streams=args['streams'])
         db.session.add(music)
         db.session.commit() # permanently adds to DB
-        # my_music[itm_id] = args
-        # return my_music[itm_id], 201 
+        return music, 201 
 
     def delete(self, itm_id):
         itm_not_incl(itm_id)
@@ -72,7 +71,6 @@ class SearchQuery(Resource):
 
 # add the resource to API and make it accessible at the URL
 # We can also add parameters for our resource
-# api.add_resource(Google, "/doesthiswork")
 api.add_resource(SearchQuery, "/playlist/<int:itm_id>")
 
 
